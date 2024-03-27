@@ -1,14 +1,13 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { deleteUser } from "./UserReducer";
 
 export default function Home() {
-  const users = useSelector((state) => state.users);
-  const dispatch = useDispatch();
+  const users = JSON.parse(localStorage.getItem("users")) || [];
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
-      dispatch(deleteUser({ id: id }));
+      const filtered = users.filter(item => item.id !== id);
+      localStorage.setItem('users', JSON.stringify(filtered));
+      
     }
   };
   // console.log(users)
@@ -35,7 +34,7 @@ export default function Home() {
               <td className="desc col-2">{user.title}</td>
               <td className="desc col-3">{user.description}</td>
               <td>
-                <img className="desc col-3" src={user.image} alt="My Image" />
+                <img className="desc col-3" src={user.imageURL} alt="My Image" />
               </td>
               <td className="desc col-3">
                 <Link

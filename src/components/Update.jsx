@@ -8,11 +8,13 @@ import { Input } from "./Input";
 
 function Update() {
   const { id } = useParams();
-  const users = useSelector((state) => state.users);
+  const users = JSON.parse(localStorage.getItem("users")) || [];
   const existingUser = users.filter((f) => f.id == id);
   const { title, description } = existingUser[0];
   const [utitle, setTitle] = useState(title);
   const [udescription, setDescription] = useState(description);
+  const [imageURL, setImageURL] = useState("");
+  const [isValidURL, setIsValidURL] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const methods = useForm();
@@ -35,19 +37,40 @@ function Update() {
   //   );
   //   navigate("/");
   // };
-  const handleSubmit = () => {
-    // data.preventDefault();
-    // dispatch(updateUser({ id: users[users.length-1].id + 1, utitle: data.utitle, udescription: data.udescription }))
-    // e.preventDefault();
-    dispatch(
-      updateUser({
-        id: id,
-        title: utitle,
-        description: udescription,
-      })
-    );
+  // const handleSubmit = () => {
+  //   dispatch(
+  //     updateUser({
+  //       id: id,
+  //       title: utitle,
+  //       description: udescription,
+  //     })
+  //   );
+  //   navigate("/");
+  // };
+  const handleSubmit = (data) => {
+    const newUser = {
+      id: users.length > 0 ? users[users.length - 1].id + 1 : 1,
+      title: data.title,
+      description: data.description,
+      imageURL: data.image
+    };
+    dispatch(updateUser(newUser));
+    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+    localStorage.setItem("users", JSON.stringify([...storedUsers, newUser]));
+
     navigate("/");
+  }
+  const handleOnChange = (e) => {
+    const url = e.target.value;
+    const regEx = /\.(jpe?g|png|gif|webp|bmp|svg|ico)$/i;
+    if (regEx.test(url)) {
+      setIsValidURL(true);
+      setImageURL(url);
+    } else {
+      setIsValidURL(false);
+    }
   };
+
   const title_validation = {
     name: "title",
     label: "Title",
@@ -60,9 +83,13 @@ function Update() {
         value: true,
         message: "Title is required",
       },
-      maxLength: {
-        value: 30,
-        message: "30 characters max",
+      minLength: {
+        value: 3,
+        message: '3 characters max',
+    },
+        maxLength: {
+          value: 15,
+          message: '15 characters max',
       },
     },
   };
@@ -79,10 +106,27 @@ function Update() {
         value: true,
         message: "Description is required",
       },
-      // maxLength: {
-      //   value: 30,
-      //   message: "30 characters max",
-      // },
+      minLength: {
+        value: 10,
+        message: '10 characters max',
+    },
+      maxLength: {
+          value: 50,
+          message: '50 characters max',
+      },
+    },
+  };
+  const image_validation = {
+    name: "image",
+    label: "Image",
+    type: "url",
+    id: "image",
+    placeholder: "Write url",
+    validation: {
+      required: {
+        value: true,
+        message: "Image is required",
+      },
     },
   };
   return (
@@ -116,12 +160,16 @@ function Update() {
               />
             </div>
             <div className="form-group d-grid">
-              <label htmlFor="exampleFormControlFile1">Upload Image</label>
+              {/* <label htmlFor="exampleFormControlFile1">Upload Image</label>
               <input
                 type="file"
                 className="form-control-file"
                 id="exampleFormControlFile1"
-              />
+              /> */}
+               <Input className="form-control" {...image_validation} />
+              {!isValidURL ? (
+                <p>Please enter a valid image URL (JPG, JPEG, PNG, GIF)</p>
+              ) : null}
             </div>
             <br />
             <button type="submit" className="btn btn-info">
