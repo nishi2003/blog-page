@@ -13,6 +13,14 @@ export default function Home() {
       setUsers(filtered);
     }
   };
+  const handleDuplicate = (id) => {
+    const userToDuplicate = users.find((user) => user.id === id);
+    const newId = Math.max(...users.map((user) => user.id)) + 1;
+    const duplicatedUser = { ...userToDuplicate, id: newId };
+    const updatedUsers = [...users, duplicatedUser];
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
+    setUsers(updatedUsers);
+  };
 
   const filteredUsers = users.filter(user =>
     user.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
@@ -76,6 +84,12 @@ export default function Home() {
                   className="btn btn-sm btn-danger ms-2"
                 >
                   Delete
+                </button>
+                <button
+                  onClick={() => handleDuplicate(user.id)}
+                  className="btn btn-sm btn-info ms-2"
+                >
+                  Duplicate
                 </button>
               </td>
             </tr>

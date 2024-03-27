@@ -23,11 +23,8 @@ function Create() {
       description: data.description,
       imageURL: data.image
     };
-    
-    // Dispatch action to add user to Redux store
     dispatch(addUser(newUser));
 
-    // Store user data in local storage
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
     localStorage.setItem("users", JSON.stringify([...storedUsers, newUser]));
 

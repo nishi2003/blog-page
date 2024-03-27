@@ -55,10 +55,20 @@ function Update() {
     const updatedUsers = users.map((user) =>
       user.id === existingUser.id ? updatedUser : user
     );
+    console.log(updatedUsers);
     localStorage.setItem("users", JSON.stringify(updatedUsers));
     navigate("/");
   };
-
+  // const handleOnChange = (e) => {
+  //   const url = e.target.value;
+  //   const regEx = /\.(jpe?g|png|gif|webp|bmp|svg|ico)$/i;
+  //   if (regEx.test(url)) {
+  //     setIsValidURL(true);
+  //     setImageURL(url);
+  //   } else {
+  //     setIsValidURL(false);
+  //   }
+  // };
   const title_validation = {
     name: "title",
     label: "Title",
@@ -113,7 +123,7 @@ function Update() {
   };
 
   const image_validation = {
-    name: "image",
+    name: "imageURL",
     label: "Image",
     type: "url",
     id: "image",
@@ -136,7 +146,7 @@ function Update() {
       <div className="w-50 border bg-secondary text-white p-5">
         <h3>Update details</h3>
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={methods.handleSubmit(handleSubmit)}>
             <div>
               <Input className="form-control" {...title_validation} />
             </div>
@@ -150,7 +160,7 @@ function Update() {
             <div className="form-group d-grid">
               <Input
                 className="form-control"
-                // onChange={handleImageURLChange}
+                onChange={handleImageURLChange}
                 {...image_validation}
               />
               {!isValidURL ? (
