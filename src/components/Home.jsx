@@ -1,19 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Home() {
-  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const [users, setUsers] = useState(JSON.parse(localStorage.getItem("users")) || []);
+  const [searchTitle, setSearchTitle] = useState("");
+  const [searchDescription, setSearchDescription] = useState("");
+
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       const filtered = users.filter(item => item.id !== id);
       localStorage.setItem('users', JSON.stringify(filtered));
-      
+      setUsers(filtered);
     }
   };
-  // console.log(users)
+
+  const filteredUsers = users.filter(user =>
+    user.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
+    user.description.toLowerCase().includes(searchDescription.toLowerCase())
+  );
+
   return (
     <div className="container">
       <h2 className="text-center">CRUD App with JSON server</h2>
+      <div className="row mb-3">
+        <div className="col-md-6">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by Title"
+            value={searchTitle}
+            onChange={(e) => setSearchTitle(e.target.value)}
+          />
+        </div>
+        <div className="col-md-6">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by Description"
+            value={searchDescription}
+            onChange={(e) => setSearchDescription(e.target.value)}
+          />
+        </div>
+      </div>
       <Link to="/Create" className="btn btn-success my-3">
         Create+
       </Link>
@@ -28,7 +56,7 @@ export default function Home() {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, index) => (
+          {filteredUsers.map((user, index) => (
             <tr key={index}>
               <td className="desc col-1">{user.id}</td>
               <td className="desc col-2">{user.title}</td>
@@ -39,13 +67,13 @@ export default function Home() {
               <td className="desc col-3">
                 <Link
                   to={`/edit/${user.id}`}
-                  className="btn btn-sm btn-primary "
+                  className="btn btn-sm btn-primary"
                 >
                   Edit
                 </Link>
                 <button
                   onClick={() => handleDelete(user.id)}
-                  className="btn btn-sm btn-danger ms-2 "
+                  className="btn btn-sm btn-danger ms-2"
                 >
                   Delete
                 </button>
