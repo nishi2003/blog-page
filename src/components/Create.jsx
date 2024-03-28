@@ -17,8 +17,12 @@ function Create() {
   const methods = useForm();
 
   const handleSubmit = (data) => {
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}${('0' + (currentDate.getMonth() + 1)).slice(-2)}${('0' + currentDate.getDate()).slice(-2)}`;
+    // const newId = `${formattedDate}${('0000' + users.length > 0 ? users[users.length - 1].id + 1 : 1).slice(-4)}`;
+    const newId = `${formattedDate}${('0000' + (users.length > 0 ? parseInt(users[users.length - 1].id.slice(-4)) + 1 : 1)).slice(-4)}`;
     const newUser = {
-      id: users.length > 0 ? users[users.length - 1].id + 1 : 1,
+      id:  newId,
       title: data.title,
       description: data.description,
       imageURL: data.image

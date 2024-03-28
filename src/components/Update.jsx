@@ -18,7 +18,6 @@ function Update() {
   const methods = useForm();
 
   // useEffect(() => {
-  //   // Update input fields with existing user data when component mounts
   //   setTitle(existingUser.title);
   //   setDescription(existingUser.description);
   //   setImageURL(existingUser.imageURL);

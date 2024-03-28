@@ -5,6 +5,7 @@ export default function Home() {
   const [users, setUsers] = useState(JSON.parse(localStorage.getItem("users")) || []);
   const [searchTitle, setSearchTitle] = useState("");
   const [searchDescription, setSearchDescription] = useState("");
+  // const [duplicateCounter, setDuplicateCounter] = useState(1); // Counter for duplicate IDs
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
@@ -13,20 +14,34 @@ export default function Home() {
       setUsers(filtered);
     }
   };
+
+  // const handleDuplicate = (id) => {
+  //   const userToDuplicate = users.find((user) => user.id === id);
+  //   const currentDate = new Date();
+  //   const formattedDate = `${currentDate.getFullYear()}${('0' + (currentDate.getMonth() + 1)).slice(-2)}${('0' + currentDate.getDate()).slice(-2)}`;
+  //   const newId = `${formattedDate}${('0000' + users.length + 1).slice(-4)}`; 
+  //   const duplicatedUser = { ...userToDuplicate, id: newId };
+  //   const updatedUsers = [...users, duplicatedUser];
+  //   localStorage.setItem("users", JSON.stringify(updatedUsers));
+  //   setUsers(updatedUsers);
+  // };
+  
   const handleDuplicate = (id) => {
     const userToDuplicate = users.find((user) => user.id === id);
-    const newId = Math.max(...users.map((user) => user.id)) + 1;
+    const lastDigit = parseInt(id.slice(-1)); 
+    const newLastDigit = (lastDigit + 1) % 10; 
+    const newId = id.slice(0, -1) + newLastDigit; 
     const duplicatedUser = { ...userToDuplicate, id: newId };
     const updatedUsers = [...users, duplicatedUser];
     localStorage.setItem("users", JSON.stringify(updatedUsers));
     setUsers(updatedUsers);
   };
-
+  
   const filteredUsers = users.filter(user =>
-    user.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
-    user.description.toLowerCase().includes(searchDescription.toLowerCase())
+    (searchTitle.trim() !== "" ? user.title.toLowerCase().includes(searchTitle.toLowerCase()) : true) &&
+    (searchDescription.trim() !== "" ? user.description.toLowerCase().includes(searchDescription.toLowerCase()):true)
   );
-
+  
   return (
     <div className="container">
       <h2 className="text-center">CRUD App with JSON server</h2>
