@@ -47,16 +47,20 @@ export default function Home() {
     setUsers(updatedUsers);
   };
   
+  // const filteredUsers = users.filter(user =>
+  //   (searchTitle.trim() !== "" ? user.title.toLowerCase().includes(searchTitle.toLowerCase()) : true) &&
+  //   (searchDescription.trim() !== "" ? user.description.toLowerCase().includes(searchDescription.toLowerCase()):true)
+  // );
+  const [searchQuery, setSearchQuery] = useState("");
   const filteredUsers = users.filter(user =>
-    (searchTitle.trim() !== "" ? user.title.toLowerCase().includes(searchTitle.toLowerCase()) : true) &&
-    (searchDescription.trim() !== "" ? user.description.toLowerCase().includes(searchDescription.toLowerCase()):true)
+    (searchQuery.trim() !== "" ? user.title.toLowerCase().includes(searchQuery.toLowerCase()) : true) ||
+    (searchQuery.trim() !== "" ? user.description.toLowerCase().includes(searchQuery.toLowerCase()):true)
   );
-  
   return (
     <div className="container">
       <h2 className="text-center">CRUD App with JSON server</h2>
       <div className="row mb-3">
-        <div className="col-md-6">
+        {/* <div className="col-md-6">
           <input
             type="text"
             className="form-control"
@@ -72,6 +76,15 @@ export default function Home() {
             placeholder="Search by Description"
             value={searchDescription}
             onChange={(e) => setSearchDescription(e.target.value)}
+          />
+        </div> */}
+        <div className="col-md-12">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by Title or Description"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>
