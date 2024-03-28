@@ -26,11 +26,21 @@ export default function Home() {
   //   setUsers(updatedUsers);
   // };
   
+  // const handleDuplicate = (id) => {
+  //   const userToDuplicate = users.find((user) => user.id === id);
+  //   const lastDigit = parseInt(id.slice(-1)); 
+  //   const newLastDigit = (lastDigit + 1) % 10; 
+  //   const newId = id.slice(0, -1) + newLastDigit; 
+  //   const duplicatedUser = { ...userToDuplicate, id: newId };
+  //   const updatedUsers = [...users, duplicatedUser];
+  //   localStorage.setItem("users", JSON.stringify(updatedUsers));
+  //   setUsers(updatedUsers);
+  // };
+  
   const handleDuplicate = (id) => {
     const userToDuplicate = users.find((user) => user.id === id);
-    const lastDigit = parseInt(id.slice(-1)); 
-    const newLastDigit = (lastDigit + 1) % 10; 
-    const newId = id.slice(0, -1) + newLastDigit; 
+    const lastId = users.length > 0 ? parseInt(users[users.length - 1].id) : 0;
+    const newId = (lastId + 1).toString();
     const duplicatedUser = { ...userToDuplicate, id: newId };
     const updatedUsers = [...users, duplicatedUser];
     localStorage.setItem("users", JSON.stringify(updatedUsers));

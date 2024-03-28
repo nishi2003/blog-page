@@ -33,13 +33,13 @@ function Update() {
 
   const handleImageURLChange = (e) => {
     setImageURL(e.target.value);
-    validateURL(e.target.value);
+    // validImageType(e.target.value);
   };
 
-  const validateURL = (url) => {
-    const regEx = /\.(jpe?g|png|gif|webp|bmp|svg|ico)$/i;
-    setIsValidURL(regEx.test(url));
-  };
+  // const validateURL = (url) => {
+  //   const regEx = /\.(jpe?g|png|gif|webp|bmp|svg|ico)$/i;
+  //   setIsValidURL(regEx.test(url));
+  // };
 
   const handleSubmit = (data) => {
     const updatedUser = {
@@ -121,21 +121,45 @@ function Update() {
     },
   };
 
+  // const image_validation = {
+  //   name: "imageURL",
+  //   label: "Image",
+  //   type: "url",
+  //   id: "image",
+  //   // value: existingUser?.imageURL,
+  //   value: imageURL,
+  //   onChange: (e) => {
+  //     setImageURL(e.target.value);
+  //   },
+  //   placeholder: "Write url",
+  //   validation: {
+  //     required: {
+  //       value: true,
+  //       message: "Image is required",
+  //     },
+  //   },
+  // };
+
   const image_validation = {
     name: "imageURL",
     label: "Image",
     type: "url",
     id: "image",
-    // value: existingUser?.imageURL,
-    value: imageURL,
-    onChange: (e) => {
-      setImageURL(e.target.value);
-    },
     placeholder: "Write url",
+    value:imageURL,
     validation: {
       required: {
-        value: true,
+        value:true ,
         message: "Image is required",
+      },
+      validate: {
+        validImageType: (value) => {
+          const regEx = /\.(jpe?g|png|gif)$/i; 
+          if (regEx.test(value)) {
+            return true; 
+          }
+          return "Invalid image type. Only JPG, JPEG, PNG, and GIF are supported."; 
+        },
       },
     },
   };

@@ -28,10 +28,17 @@ function Create() {
       imageURL: data.image
     };
     dispatch(addUser(newUser));
-
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
     localStorage.setItem("users", JSON.stringify([...storedUsers, newUser]));
 
+    // const url = data.target.value;
+    // const regEx = /\.(jpe?g|png|gif|webp|bmp|svg|ico)$/i;
+    // if (regEx.test(url)) {
+    //   setIsValidURL(true);
+    //   setImageURL(url);
+    // } else {
+    //   setIsValidURL(false);
+    // }
     navigate("/");
   };
   // const [items, setItems] = useState([]);
@@ -39,16 +46,18 @@ function Create() {
   // useEffect(() => {
   //   localStorage.setItem('items', JSON.stringify(items));
   // }, [items]);
-  const handleOnChange = (e) => {
-    const url = e.target.value;
-    const regEx = /\.(jpe?g|png|gif|webp|bmp|svg|ico)$/i;
-    if (regEx.test(url)) {
-      setIsValidURL(true);
-      setImageURL(url);
-    } else {
-      setIsValidURL(false);
-    }
-  };
+
+  // const handleOnChange = (e) => {
+  //   const url = e.target.value;
+  //   const regEx = /\.(jpe?g|png|gif|webp|bmp|svg|ico)$/i;
+  //   if (regEx.test(url)) {
+  //     setIsValidURL(true);
+  //     setImageURL(url);
+  //   } else {
+  //     setIsValidURL(false);
+  //   }
+  // };
+
 
   const title_validation = {
     name: "title",
@@ -94,19 +103,66 @@ function Create() {
     },
   };
 
-  const image_validation = {
-    name: "image",
-    label: "Image",
-    type: "url",
-    id: "image",
-    placeholder: "Write url",
-    validation: {
-      required: {
-        value: true,
-        message: "Image is required",
+  // const image_validation = {
+  //   name: "image",
+  //   label: "Image",
+  //   type: "url",
+  //   id: "image",
+  //   placeholder: "Write url",
+  //   validation: {
+  //     required: {
+  //       value: true,
+  //       message: "Image is required",
+  //     },
+  //   },
+  // };
+
+//   const image_validation = {
+//   name: "image",
+//   label: "Image",
+//   type: "url",
+//   id: "image",
+//   placeholder: "Write url",
+//   validation: {
+//     required: {
+//       value: true,
+//       message: "Image is required",
+//     },
+//     validate: {
+//       validImageType: (value) => {
+//         const regEx = /\.(jpe?g|png|gif)$/i; 
+//         if (regEx.test(value)) {
+//           return true; 
+//         }
+//         return "Invalid image type. Only JPG, JPEG, PNG, and GIF are supported."; 
+//       },
+//     },
+//   },
+// };
+
+const image_validation = {
+  name: "image",
+  label: "Image",
+  type: "url",
+  id: "image",
+  placeholder: "Write url",
+  validation: {
+    required: {
+      value: true,
+      message: "Image is required",
+    },
+    validate: {
+      validImageType: (value) => {
+        const regEx = /\.(jpe?g|png|gif)$/i; 
+        if (regEx.test(value)) {
+          return true; 
+        }
+        return "Invalid image type. Only JPG, JPEG, PNG, and GIF are supported."; 
       },
     },
-  };
+  },
+};
+  
 
   return (
     <div className="d-flex w-100 vh-100 justify-content-center align-items-center">
